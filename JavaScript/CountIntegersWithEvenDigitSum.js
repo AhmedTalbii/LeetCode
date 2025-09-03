@@ -1,3 +1,5 @@
+'use strict';
+
 var countEven = function(num) {
     let res = 0
     for (let i = 2; i <= num ; i++) {

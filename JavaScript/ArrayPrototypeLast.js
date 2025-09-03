@@ -1,3 +1,5 @@
+'use strict';
+
 Array.prototype.last = function() {
     if (this.length===0) {
         console.log(-1);
