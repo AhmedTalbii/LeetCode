@@ -1,3 +1,5 @@
+'use strict';
+
 var findDiagonalOrder = function (mat) {
     if (!mat.length || !mat[0].length) return [];
     let GoingUp = true
