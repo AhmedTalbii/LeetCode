@@ -1,31 +1,9 @@
-'use state';
+'use strict';
 
-var singleNumber = function(nums) {
-    if (nums.length === 1) {
-        return nums[0]
-    }
-    let nArr = [];
-    for (let i = 1 ; i < nums.length ; i++) {
-        if ((nums[i-1] ^ nums[i]) === 0) {
-            nArr.push(nums[i]);
-            nums.splice(i-1,2);
-            i--;
-        } else {
-            nArr.forEach((e)=>{
-              if ((nums[i-1] ^ e) === 0) {
-                nums.splice(i-1,1);
-                i--;
-              } else if ((nums[i] ^ e) === 0) {
-                nums.splice(i,1);
-                i--;
-              }
-            })
-        }
-    }
-    // nArr.forEach((e,i)=>{
-    //     console.log(e,i)
-    // })
-    return singleNumber(nums);
+var singleNumber = function (nums) {
+  let n = new Map()
+  for (let x of nums) n.set(x, (n.get(x) || 0) + 1) ;
+  for (let [name,ele] of n) if (ele === 1) return name ;
 };
 
-console.log(singleNumber([0,1,0,1,0,1,99]));
+console.log(singleNumber([2,2,3,2]));

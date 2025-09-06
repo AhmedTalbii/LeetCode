@@ -1,4 +1,4 @@
-'use state';
+'use strict';
 
 var singleNumber = function(nums) {
     let res = nums[0]
