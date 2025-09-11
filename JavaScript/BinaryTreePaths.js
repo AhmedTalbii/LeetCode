@@ -5,34 +5,32 @@ function TreeNode(val, left, right) {
   this.right = right === undefined ? null : right;
 }
 
-var binaryTreePaths = function (root) {
-  let res = [],
-    ma = [],
-    qeue = [];
+var binaryTreePaths = function(root) {
+  let res = [];
+  let qeue = new Map();
 
-  function solve(root) {
-    ma.push(root.val);
+  function solve(node, path = []) {
+    path.push(node.val);
 
-    if (root.left !== null) {
-      if (root.right !== null) {
-        qeue.push(root.right);
-      }
-      return solve(root.left);
+    if (node.left) {
+      if (node.right) qeue.set(node, [...path, node.right.val]);
+      solve(node.left, [...path]);
     }
-    if (root.right !== null) {
-      return solve(root.right);
-    }
-    if (root.left === null && root.right === null) {
-      res.push(ma.join("->"));
-      ma = [ma[0]];
-      if (qeue.length !== 0) {
-        let t = qeue[qeue.length - 1];
-        qeue.pop();
-        solve(t);
+
+    if (node.right) solve(node.right, [...path]);
+
+    if (!node.left && !node.right) {
+      res.push(path.join("->"));
+
+      if (qeue.length > 0) {
+        const lastKey = Array.from(qeue.keys()).pop();
+        const newPath = qeue.get(lastKey).slice(0, -1);
+        qeue.delete(lastKey);
+        solve(lastKey, newPath);
       }
-      return;
     }
   }
+
   solve(root);
   return res;
 };
