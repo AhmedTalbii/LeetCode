@@ -1,44 +1,39 @@
-var maximumTotalDamage = function (power) {
-    power.sort((a, b) => a - b);
-    let n = power.length;
-    if (n === 1) return power[0];
-    let res = 0;
-    let counted0 = false;
+// var maximumTotalDamage = function (power) {
+//     power.sort((a, b) => a - b)
+//     let cnt = new Map(), res = 0;
+//     for (const x of power) cnt.set(x, (cnt.get(x) || 0) + 1);
+//     cnt = Array.from(cnt.entries());
+//     for (i = cnt.length - 2; i >= 0; i--) {
+//         if (cnt[i + 1][0] - cnt[i][0] <= 2 && cnt[i + 1][0] - cnt[i][0] !== 0 && ((cnt[i + 1][0] * cnt[i + 1][1]) > (cnt[i][0] * cnt[i][1]))) {
+//             cnt.splice(i, 1);
+//             i--;
+//         } else if (cnt[i + 1][0] - cnt[i][0] <= 2 && cnt[i + 1][0] - cnt[i][0] !== 0 && ((cnt[i + 1][0] * cnt[i + 1][1]) < (cnt[i][0] * cnt[i][1]))) {
+//             cnt.splice(i+1, 1);
+//             continue;
+//         }
+//     }
+//     for (let [v, c] of cnt) res += v * c;
+//     return res;
+// };
 
-    let i = n - 1;
-    while (i >= 0) {
-        let right = 0;
-        let k = i;
-        while (k >= 0 && power[k] === power[i]) { right += power[i]; k--; }
-
-        if (k >= 0) {
-            let left = 0;
-            let j = k;
-            while (j >= 0 && power[j] === power[k]) { left += power[k]; j--; }
-
-            if (j === 0 || k === 0) counted0 = true;
-            if (power[i] - power[k] <= 2) {
-                if (right >= left) res += right;
-                else res += left;
-                i = j;
-            } else {
-                res += right;
-                if (k === 0) counted0 = true;
-                i = k;
-            }
-        } else {
-            res += right;
-            i = k;
-        }
+var maximumTotalDamage = function(power) {
+    const cnt = new Map();
+    for (const x of power) cnt.set(x, (cnt.get(x)||0)+1);
+    const vals = Array.from(cnt.keys()).sort((a,b)=>a-b);
+    const sums = vals.map(v => v*cnt.get(v));
+    const n = vals.length;
+    if(n===0) return 0;
+    const dp = Array(n).fill(0);
+    dp[0] = sums[0];
+    for(let i=1;i<n;i++){
+        let take = sums[i];
+        let j=i-1;
+        while(j>=0 && vals[j]>vals[i]-3) j--;
+        if(j>=0) take+=dp[j];
+        dp[i]=Math.max(dp[i-1], take);
     }
-
-    if (!counted0 && (n === 1 || power[0] <= power[1] - 2)) res += power[0];
-    return res;
+    return dp[n-1];
 };
 
-
-
-console.log(maximumTotalDamage([1, 1, 3, 4]));
-console.log(maximumTotalDamage([7, 1, 6, 6]));
-console.log(maximumTotalDamage([5,9,2,10,2,7,10,9,3,8]));
-console.log(maximumTotalDamage([5,5,5,5,5,5,5,5,5,4,4,4,4,4,4,4,4,4,4,4,4,4,4,4,4,4,4]));
+console.log(maximumTotalDamage([7,1,6,6])); // 13
+console.log(maximumTotalDamage([1,1,3,4])); // 6
