@@ -1,11 +1,10 @@
-var numberOfBeams = function (bank) {
-    bank = bank.map(x => x.split('1').length - 1);
-    bank = bank.filter(x => x !== 0);
-    let res = 0;
-    for (let i = 1; i < bank.length;i++) {
-        res += bank[i-1] * bank[i];
+var numberOfBeams = function (b) {
+    b = b.map(x => x.split('1').length - 1);
+    let res = 0, p = 0;
+    for (let v of b) {
+        if (v) {res+=v*p; p=v}
     }
     return res;
 };
 
-console.log(numberOfBeams(["011001","000000","010100","001000"]));
+console.log(numberOfBeams(["00000","00101","10100","11110","11100","01001","00100","11010"]));
